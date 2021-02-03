@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/head.ejs') %>
+
+    <body>
+        <%- include('../partials/nav.ejs') %>
+
+            <div class="details content">
+                <h2>Blog</h2>
+                <% if(blog) { %>
+                    <h2 class="title">
+                        <%= blog.title %>
+                    </h2>
+                    <p class="snippet">
+                        <%= blog.snippet %>
+                    </p>
+                    <div class="content">
+                        <p>
+                            <%= blog.body %>
+                        </p>
+                    </div>
+                    <a class="delete" data-doc="<%= blog._id %>">
+                        <img src="/images/trash.png" alt="Delete Icon">
+                    </a>
+                    <% } else {%>
+                        <p>There are no blog no display</p>
+                        <% } %>
+            </div>
+
+            <%- include('../partials/footer.ejs') %>
+
+                <script>
+                    const delButton = document.querySelector('a.delete')
+                    delButton.addEventListener('click', e => {
+                        const endpoint = `/blogs/${delButton.dataset.doc}`
+
+                        fetch(endpoint, {
+                            method: 'DELETE',
+                        })
+                            .then(res => res.json())
+                            .then(data => window.location.href = data.redirect)
+                            .catch(err => console.log(err))
+                    })
+                </script>
+    </body>
+
+</html>
